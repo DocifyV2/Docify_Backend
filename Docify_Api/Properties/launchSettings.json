@@ -16,7 +16,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "MSSQL_CONNECTION_STRING": "Server=localhost;Database=PostDigitaliser;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True",
+        "MSSQL_CONNECTION_STRING": "Server=localhost;Database=Docify;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True",
         "AZURE_BLOB_STORAGE": "https://receiptsproj.blob.core.windows.net/"
       },
       "dotnetRunMessages": true,
@@ -28,7 +28,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "MSSQL_CONNECTION_STRING": "Server=localhost;Database=PostDigitaliser;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+        "MSSQL_CONNECTION_STRING": "Server=localhost;Database=Docify;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
       }
     },
     "Container (Dockerfile)": {
