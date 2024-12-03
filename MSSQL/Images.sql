@@ -1,0 +1,5 @@
+CREATE TABLE [dbo].[Images]
+(
+	[Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [Filename] VARCHAR(50) NULL
+)
