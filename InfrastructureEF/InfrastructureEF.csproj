@@ -11,4 +11,8 @@
     <Folder Include="SeedData\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DomainService\DomainService.csproj" />
+  </ItemGroup>
+
 </Project>
