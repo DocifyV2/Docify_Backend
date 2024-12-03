@@ -1,6 +1,7 @@
+using Docify_Api;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PostDigitaliser.Server.Controllers
+namespace Docify_Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]

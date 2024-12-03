@@ -5,7 +5,7 @@ using PostDigitaliser.AiDataClient.Models;
 using PostDigitaliser.Server.DTO;
 using PostDigitaliser.Server.Repository.Interfaces;
 
-namespace PostDigitaliser.Server.Controllers
+namespace Docify_Api.Controllers
 {
     [ApiController]
     [Route("/api/[controller]")]
