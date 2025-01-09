@@ -14,14 +14,14 @@ namespace PostDigitaliser.Server.Wrappers
             BaseAddress = new Uri("http://192.168.1.25:5000")
         };
 
-        public async Task<IEnumerable<ReceiptsInputModel>> GetJsonFromImage()
+        public async Task<IEnumerable<ReceiptsDTO>> GetJsonFromImage()
         {
             var response = await _httpClient.GetAsync("get-json");
 
             //Parse response to receiptModel
             var responseString = await response.Content.ReadAsStringAsync();
 
-            var receiptModel = JsonSerializer.Deserialize<IEnumerable<ReceiptsInputModel>>(responseString,
+            var receiptModel = JsonSerializer.Deserialize<IEnumerable<ReceiptsDTO>>(responseString,
                 new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,

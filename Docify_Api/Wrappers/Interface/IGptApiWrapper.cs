@@ -4,7 +4,7 @@ namespace PostDigitaliser.Server.Wrappers.Interface
 {
     public interface IGptApiWrapper
     {
-        Task<IEnumerable<ReceiptsInputModel>> GetJsonFromImage();
+        Task<IEnumerable<ReceiptsDTO>> GetJsonFromImage();
         Task<bool> UploadImageAsync(IFormFile imageFile);
     }
 }

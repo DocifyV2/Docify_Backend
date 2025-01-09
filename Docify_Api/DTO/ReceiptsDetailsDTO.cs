@@ -1,6 +1,6 @@
 ﻿namespace PostDigitaliser.AiDataClient.Models
 {
-    public class ShipmentDetailsInputModel
+    public class ReceiptsDetailsDTO
     {
         //The actual track and trace code
         public Guid? Id { get; set; }

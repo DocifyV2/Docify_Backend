@@ -1,5 +1,8 @@
 ﻿using System.Globalization;
+using System.Text.Json;
 using Azure.Storage.Blobs;
+using Docify_Api.DTO;
+using Docify_Api.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using PostDigitaliser.AiDataClient.Models;
 using PostDigitaliser.Server.DTO;
@@ -10,46 +13,15 @@ namespace Docify_Api.Controllers
     [ApiController]
     [Route("/api/[controller]")]
     public class ReceiptsController(ILogger<ReceiptsController> logger, BlobServiceClient blobContainerClient,
-            IReceiptsRepository receiptsRepository)
+            IReceiptsService receiptsService)
         : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                // var result = await gptApiWrapper.GetJsonFromImage();
-                var receipts = await receiptsRepository.GetReceipts();
-
-                var result = new List<ReceiptsInputModel>();
-
-                foreach (var receipt in receipts)
-                {
-                    var shipmentDetails = receipt.ShipmentDetails
-                        .Select(shipmentDetail => new ShipmentDetailsInputModel
-                        {
-                            Id = shipmentDetail.Id,
-                            BarCode = shipmentDetail.BarCode,
-                            PostalCode = shipmentDetail.PostalCode,
-                            HouseNumber = shipmentDetail.HouseNumber,
-                            City = shipmentDetail.City,
-                            Country = shipmentDetail.Country,
-                        })
-                        .ToList();
-
-                    result.Add(new ReceiptsInputModel
-                    {
-                        Id = receipt.Id,
-                        LocationCode = receipt.LocationCode,
-                        Address = $"{receipt.Street} {receipt.Number}",
-                        Timestamp = DateTime.ParseExact($"{receipt.Date} {receipt.Time}", "yyyy-MM-dd HH:mm", null,
-                            DateTimeStyles.None),
-                        ShipmentCode = receipt.ShipmentCode,
-                        ShipmentDetails = shipmentDetails,
-                        ServiceProvider = receipt.ServiceProvider,
-                        Status = receipt.Status
-                    });
-                }
+                var result = await receiptsService.GetReceipts();
 
                 return Ok(result);
             }
@@ -65,31 +37,7 @@ namespace Docify_Api.Controllers
         {
             try
             {
-                var receipt = await receiptsRepository.GetReceipt(id);
-
-                var shipmentDetails = receipt.ShipmentDetails
-                    .Select(shipmentDetail => new ShipmentDetailsInputModel
-                    {
-                        Id = shipmentDetail.Id,
-                        BarCode = shipmentDetail.BarCode,
-                        PostalCode = shipmentDetail.PostalCode,
-                        HouseNumber = shipmentDetail.HouseNumber,
-                        City = shipmentDetail.City,
-                        Country = shipmentDetail.Country,
-                    })
-                    .ToList();
-
-                var result = new ReceiptsInputModel
-                {
-                    LocationCode = receipt.LocationCode,
-                    Address = $"{receipt.Street} {receipt.Number}",
-                    Timestamp = DateTime.ParseExact($"{receipt.Date} {receipt.Time}", "yyyy-MM-dd HH:mm", null,
-                        DateTimeStyles.None),
-                    ShipmentCode = receipt.ShipmentCode,
-                    ShipmentDetails = shipmentDetails,
-                    ServiceProvider = receipt.ServiceProvider,
-                    Status = receipt.Status
-                };
+                var result = await receiptsService.GetReceipt(id);
 
                 return Ok(result);
             }
@@ -105,12 +53,34 @@ namespace Docify_Api.Controllers
         {
             try
             {
-                return Ok(Guid.Parse("22222222-2222-2222-2222-222222222222"));
+                //Do some ai logic to get the data from the image
+
+                //this is for testing purposes
+                return Ok(await receiptsService.GetReceipt(Guid.Parse("22222222-2222-2222-2222-222222222222")));
             }
             catch (Exception e)
             {
                 logger.LogError(e, $"{GetType().Name} - Failed with message: {e.Message}");
                 return StatusCode(500, e);
+            }
+        }
+
+        [HttpPost("SubmitData")]
+        public async Task<IActionResult> Post([FromForm] ShippingReceiptsInputModel postModel)
+        {
+            try
+            {
+                var test = JsonSerializer.Deserialize<List<ShippingReceiptsDetailsInputModel>>(
+                    postModel.ShipmentDetails, new JsonSerializerOptions
+                    {
+                        PropertyNameCaseInsensitive = true,
+                    });
+                return Ok(test);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, $"{GetType().Name} - Failed with message: {e.Message}");
+                return StatusCode(500, e.Message);
             }
         }
     }
